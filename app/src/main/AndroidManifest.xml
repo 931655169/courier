@@ -12,7 +12,6 @@
   <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
   <uses-permission android:name="android.permission.BLUETOOTH"/>
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-  <service android:name="com.amap.api.location.APSService"/>
   <application
       android:name="org.litepal.LitePalApplication"
       android:allowBackup="true"
@@ -27,13 +26,16 @@
         android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity android:name="send_express.DestinationActivity"
+        android:screenOrientation="portrait"/>
+    <activity android:name="send_express.MapActivity"
+        android:screenOrientation="portrait"/>
     <meta-data android:name="com.amap.api.v2.apikey"
-        android:value="cd72ba2490f85fd429ee9b3252403c89">
-    </meta-data>
+        android:value="cd72ba2490f85fd429ee9b3252403c89"/>
+    <service android:name="com.amap.api.location.APSService"/>
   </application>
 
 </manifest>

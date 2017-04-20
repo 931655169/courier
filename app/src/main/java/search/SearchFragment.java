@@ -1,5 +1,6 @@
 package search;
 
+import Utils.CompanyfromCodeUtils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +36,7 @@ public class SearchFragment extends Fragment {
   showResultListener mCallback;
 
   public interface showResultListener {
-    public void onshowResultListener(int message);
+    public void onshowResultListener(String selectcompany,String edt);
   }
 
   @Override
@@ -66,7 +67,8 @@ public class SearchFragment extends Fragment {
         } else if (mSelectCompany == null) {
           Toast.makeText(getActivity(), "你还没选择快递公司", Toast.LENGTH_SHORT).show();
         } else if (getActivity() instanceof showResultListener) {
-          ((showResultListener) getActivity()).onshowResultListener(1);
+
+          ((showResultListener) getActivity()).onshowResultListener(CompanyfromCodeUtils.Companyformat(mSelectCompany),mEdtText);
         }
       }
     });

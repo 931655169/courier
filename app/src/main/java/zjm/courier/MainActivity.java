@@ -1,7 +1,7 @@
 package zjm.courier;
 
 import Entity.ExpressDetail;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,8 +18,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import home.HomeFragment;
 import home.FragmentListAdapter;
+import home.HomeFragment;
 import java.util.ArrayList;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageBottomTabLayout;
@@ -27,7 +27,8 @@ import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 import search.ResultResultFragment;
 import search.SearchFragment;
-import send_express.MyMapFragment;
+import send_express.DestinationActivity;
+import send_express.MapActivity;
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.showResultListener {
@@ -75,20 +76,18 @@ public class MainActivity extends AppCompatActivity
     NavigationController navigationController = mPageButtonTalayoutButtom.material()
         .addItem(R.mipmap.home_unselect, "首页")
         .addItem(R.mipmap.search_unselect, "查快递")
-        .addItem(R.mipmap.car_unselect, "附近快递")
+        .addItem(R.mipmap.car_unselect, "历史查询")
         .build();
     navigationController.setupWithViewPager(mViewPagerTablayout);
   }
 
   void initViewPager() {
     Fragment Homefragment = HomeFragment.newInstance();
-    Fragment Mapfragment = MyMapFragment.newInstance();
     SearchFragment searchFragment = new SearchFragment();
     ResultResultFragment resultResultFragment = new ResultResultFragment();
     mFragmentArrayList = new ArrayList<Fragment>();
     mFragmentArrayList.add(Homefragment);
     mFragmentArrayList.add(searchFragment);
-    mFragmentArrayList.add(Mapfragment);
     mFragmentArrayList.add(resultResultFragment);
     FragmentManager fragmentManager = this.getSupportFragmentManager();
     fragmentPagerAdapter = new FragmentListAdapter(fragmentManager, mFragmentArrayList);
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == R.id.action_settings) {
-        DataSupport.deleteAll(ExpressDetail.class);
+      DataSupport.deleteAll(ExpressDetail.class);
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -128,15 +127,14 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.nav_histroy) {
-
-    } else if (id == R.id.nav_search) {
-
-      mViewPagerTablayout.setCurrentItem(1);
-    } else if (id == R.id.nav_home) {
-
       mViewPagerTablayout.setCurrentItem(2);
-    } else if (id == R.id.nav_back) {
+    } else if (id == R.id.nav_search) {
+      Intent intent = new Intent(MainActivity.this, MapActivity.class);
+      startActivity(intent);
 
+    } else if (id == R.id.nav_home) {
+      mViewPagerTablayout.setCurrentItem(0);
+    } else if (id == R.id.nav_back) {
       Toast.makeText(this, "By 石成", Toast.LENGTH_SHORT).show();
     }
 
@@ -144,8 +142,8 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
-  @Override public void onshowResultListener(int message) {
-    if (message == 1) {
+  @Override public void onshowResultListener(String ShipperCode,String OrderCode ) {
+    if (ShipperCode!=null && OrderCode!=null) {
       mViewPagerTablayout.setCurrentItem(3);
     }
   }

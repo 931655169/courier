@@ -3,6 +3,10 @@
 
   <string name="navigation_drawer_open">Open navigation drawer</string>
   <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="car_use_title">我要用车</string>
+  <string name="destination_button">输入目的地</string>
+  <string name="cancel_button">取消</string>
+  <string name="destination_title">请输入目的地</string>
 
   <string name="action_settings">Settings</string>
 </resources>

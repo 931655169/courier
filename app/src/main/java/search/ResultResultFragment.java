@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import butterknife.BindView;
+import com.carlosdelachica.easyrecycleradapters.adapter.EasyRecyclerAdapter;
 import home.RecyclerviewAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ResultResultFragment extends BaseFragment {
   private ArrayList<ExpressDetail> expressDetailList = new ArrayList<ExpressDetail>();
   private List<TracesBean> tracebeanlist=new ArrayList<TracesBean>();
   private RecyclerviewAdapter mExpressItemAdapter;
-  private RecyclerviewAdapter mTraceAdapter;
+  private TraceAdapter mTraceAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -49,12 +49,16 @@ public class ResultResultFragment extends BaseFragment {
     mRecyclerViewExpressCard.setAdapter(mExpressItemAdapter);
     mRecyclerViewExpressCard.addItemDecoration(
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
-  }
 
+    mTraceAdapter=new TraceAdapter(tracebeanlist);
+    mRecyclerViewExpressTrace.setLayoutManager(new LinearLayoutManager(getActivity()));
+    mRecyclerViewExpressTrace.setAdapter(mTraceAdapter);
+    mRecyclerViewExpressTrace.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
+  }
   void initdb() {
     if (DataSupport.findLast(ExpressDetail.class) != null) {
       expressDetailList.add(DataSupport.findLast(ExpressDetail.class,true));
-      tracebeanlist=DataSupport.where("expressdetail_id == ?","1").find(TracesBean.class);
+      tracebeanlist=DataSupport.findAll(TracesBean.class);
     }
   }
 

@@ -1,20 +1,18 @@
 package home;
 
 import Entity.ExpressDetail;
-import android.content.Context;
+import Utils.StatefromStateCode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.carlosdelachica.easyrecycleradapters.adapter.EasyViewHolder;
 import java.util.List;
 import zjm.courier.R;
 
 public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.ViewHolder> {
   private List<ExpressDetail> mExpressDetailList;
-  private Context mContext;
 
   static class ViewHolder extends RecyclerView.ViewHolder {
     ImageView mImageViewExpress;
@@ -32,17 +30,18 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
   public RecyclerviewAdapter(List<ExpressDetail> ExpressList) {
     this.mExpressDetailList = ExpressList;
   }
+
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.recycler_item_express_card, parent, false);
     ViewHolder holder = new ViewHolder(view);
-    mContext=parent.getContext();
     return holder;
   }
+
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     ExpressDetail expressDetail = mExpressDetailList.get(position);
     holder.mImageViewExpress.setImageResource(R.mipmap.icon_blue);
-    holder.mTxtExpressStatus.setText(expressDetail.getState());
+    holder.mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
     holder.mTxtExpressName.setText(expressDetail.getLogisticCode());
   }
 
