@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <TextView
+      android:id="@+id/Txt_location"
+      android:layout_width="wrap_content"
+      android:layout_height="50dp"
+      android:text="出发地"
+      android:drawableLeft="@mipmap/ic_location"
+      android:drawablePadding="10dp"
+      android:layout_gravity="center"
+  />
+    <com.amap.api.maps.MapView
+      android:id="@+id/send_map"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+</LinearLayout>
