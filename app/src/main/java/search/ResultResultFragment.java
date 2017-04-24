@@ -3,6 +3,8 @@ package search;
 import Base.BaseFragment;
 import Entity.ExpressDetail;
 import Entity.TracesBean;
+import Network.ApiStores;
+import Service.ApiService;
 import Service.KdniaoTrackQueryAPI;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -18,6 +20,10 @@ import home.RecyclerviewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import org.litepal.crud.DataSupport;
+import org.litepal.crud.callback.SaveCallback;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import zjm.courier.MainActivity;
 import zjm.courier.R;
 
@@ -55,7 +61,7 @@ public class ResultResultFragment extends BaseFragment {
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
   }
 
-  void initdb() {
+  public void initdb() {
     if (DataSupport.findLast(ExpressDetail.class) != null) {
       expressDetail = DataSupport.findLast(ExpressDetail.class, true);
       mTxtExpressName.setText(expressDetail.getLogisticCode());
@@ -75,11 +81,51 @@ public class ResultResultFragment extends BaseFragment {
   void post(String mShipperCode, String mLogisticCode) {
     KdniaoTrackQueryAPI k = new KdniaoTrackQueryAPI();
     try {
-      k.sendPost(mShipperCode, mLogisticCode);
+      sendPost(mShipperCode, mLogisticCode);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
+
+  public void sendPost(final String ShipperCode, String LogisticCode) throws Exception {
+    final String requestData = "{'OrderCode':'','ShipperCode':'"
+        + ShipperCode
+        + "','LogisticCode':'"
+        + LogisticCode
+        + "'}";
+    String dataSign = KdniaoTrackQueryAPI.encrypt(requestData, KdniaoTrackQueryAPI.AppKey, "UTF-8");
+    ApiStores apiStores = ApiService.createApiStores();
+    Call<ExpressDetail> call = apiStores.getExpressDetail(
+        KdniaoTrackQueryAPI.urlEncoder(dataSign, "UTF-8"), "2", KdniaoTrackQueryAPI.EBusinessID,
+        KdniaoTrackQueryAPI.urlEncoder(requestData, "UTF-8"), "1002"
+    );
+    call.enqueue(new Callback<ExpressDetail>() {
+      @Override
+      public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
+        response.body().saveAsync().listen(new SaveCallback() {
+          @Override public void onFinish(boolean success) {
+
+          }
+        });
+        if (response.body().isSuccess()) {
+          DataSupport.deleteAll(TracesBean.class);
+          for (int i = 0; i < response.body().getTracesX().size(); i++) {
+            TracesBean tracesBean = new TracesBean();
+            tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
+            tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
+            tracesBean.save();
+          }
+        }
+        initdb();
+        initRecyclerview();
+      }
+
+      @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
+        Log.d("调用", t.getMessage() + "网络请求失败");
+      }
+    });
+  }
+
   void handleMessage() {
     MainActivity activity = (MainActivity) getActivity();
     hander = activity.handler;
