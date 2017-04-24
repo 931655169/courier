@@ -62,12 +62,11 @@ public class QuestionFragment extends BaseFragment {
 
   void initdb() {
     if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList.addAll(DataSupport.findAll(ExpressDetail.class));
+      expressDetailList=DataSupport.where("State = ?","4").find(ExpressDetail.class);
     }
   }
 
   public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-
     private int space;
 
     public SpaceItemDecoration(int space) {

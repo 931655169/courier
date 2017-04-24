@@ -40,7 +40,7 @@ public class UnSignFragment extends Fragment {
 
   void initdb() {
     if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList.addAll(DataSupport.findAll(ExpressDetail.class));
+      expressDetailList=DataSupport.where("State = ?","2").find(ExpressDetail.class);
     }
   }
 

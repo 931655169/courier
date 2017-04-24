@@ -6,26 +6,30 @@ import Entity.TracesBean;
 import Service.KdniaoTrackQueryAPI;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
-import com.carlosdelachica.easyrecycleradapters.adapter.EasyRecyclerAdapter;
 import home.RecyclerviewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import org.litepal.crud.DataSupport;
+import zjm.courier.MainActivity;
 import zjm.courier.R;
 
 public class ResultResultFragment extends BaseFragment {
   @BindView(R.id.recycler_express_trace) RecyclerView mRecyclerViewExpressTrace;
-  @BindView(R.id.recycler_card) RecyclerView mRecyclerViewExpressCard;
-
-  private ArrayList<ExpressDetail> expressDetailList = new ArrayList<ExpressDetail>();
-  private List<TracesBean> tracebeanlist=new ArrayList<TracesBean>();
+  @BindView(R.id.txt_express_name) TextView mTxtExpressName;
+  @BindView(R.id.txt_express_status) TextView mTxtExpressStatus;
+  private ExpressDetail expressDetail;
+  private List<TracesBean> tracebeanlist = new ArrayList<TracesBean>();
   private RecyclerviewAdapter mExpressItemAdapter;
   private TraceAdapter mTraceAdapter;
+  private Handler hander;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -38,39 +42,53 @@ public class ResultResultFragment extends BaseFragment {
 
   @Override
   protected void initView(View view, Bundle saveInstanceState) {
-    FragmentManager fragmentManager = getChildFragmentManager();
-    post();
+    handleMessage();
     initdb();
     initRecyclerview();
   }
-  private void initRecyclerview() {
-    mExpressItemAdapter = new RecyclerviewAdapter(expressDetailList);
-    mRecyclerViewExpressCard.setLayoutManager(new LinearLayoutManager(getContext()));
-    mRecyclerViewExpressCard.setAdapter(mExpressItemAdapter);
-    mRecyclerViewExpressCard.addItemDecoration(
-        new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
 
-    mTraceAdapter=new TraceAdapter(tracebeanlist);
+  private void initRecyclerview() {
+    mTraceAdapter = new TraceAdapter(tracebeanlist);
     mRecyclerViewExpressTrace.setLayoutManager(new LinearLayoutManager(getActivity()));
     mRecyclerViewExpressTrace.setAdapter(mTraceAdapter);
-    mRecyclerViewExpressTrace.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
+    mRecyclerViewExpressTrace.addItemDecoration(
+        new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
   }
+
   void initdb() {
     if (DataSupport.findLast(ExpressDetail.class) != null) {
-      expressDetailList.add(DataSupport.findLast(ExpressDetail.class,true));
-      tracebeanlist=DataSupport.findAll(TracesBean.class);
+      expressDetail = DataSupport.findLast(ExpressDetail.class, true);
+      mTxtExpressName.setText(expressDetail.getLogisticCode());
+      mTxtExpressStatus.setText(expressDetail.getState());
+      if (expressDetail.isSuccess()){
+        Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT);
+        tracebeanlist=DataSupport.findAll(TracesBean.class);
+        mTraceAdapter=new TraceAdapter(tracebeanlist);
+      }
+      if (!expressDetail.isSuccess()){
+        tracebeanlist.clear();
+        Log.d("xx","无状态");
+      }
     }
   }
 
-  void post() {
+  void post(String mShipperCode, String mLogisticCode) {
     KdniaoTrackQueryAPI k = new KdniaoTrackQueryAPI();
     try {
-      k.sendPost("", "");
+      k.sendPost(mShipperCode, mLogisticCode);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-
+  void handleMessage() {
+    MainActivity activity = (MainActivity) getActivity();
+    hander = activity.handler;
+    activity.setSendResultFragmentMessage(new MainActivity.SendResultFragmentMessage() {
+      @Override public void getSearchMessage(String mShipperCode, String mLogisticCode) {
+        post(mShipperCode, mLogisticCode);
+      }
+    });
+  }
   public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     private int space;

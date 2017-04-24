@@ -37,10 +37,9 @@ public class SignFragment extends Fragment {
     recyclerViewView.addItemDecoration(
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
   }
-
   void initdb() {
     if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList.addAll(DataSupport.findAll(ExpressDetail.class));
+      expressDetailList=DataSupport.where("State = ?","3").find(ExpressDetail.class);
     }
   }
 

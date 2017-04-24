@@ -32,11 +32,13 @@ public class SearchFragment extends Fragment {
   private LinearLayout linearLayout;
   private dropdownmenuAdapter CompanyAdapter;
   private String mCompanyName[] = {"顺丰", "百世汇通", "中通", "申通", "圆通", "韵达", "邮政平递", "EMS", "天天快递"};
+  private String mShipperCode;
+  private String mLogisticCode;
   private String mSelectCompany;
   showResultListener mCallback;
 
   public interface showResultListener {
-    public void onshowResultListener(String selectcompany,String edt);
+    public void onshowResultListener(String selectcompany, String edt);
   }
 
   @Override
@@ -59,7 +61,7 @@ public class SearchFragment extends Fragment {
     View v = inflater.inflate(R.layout.search_courier, container, false);
     ButterKnife.bind(this, v);
     initDropdownWindow();
-    getEdtExpressTab();
+
     mBtnSearch.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (mEdtExpressTab.getText().toString().isEmpty()) {
@@ -67,8 +69,11 @@ public class SearchFragment extends Fragment {
         } else if (mSelectCompany == null) {
           Toast.makeText(getActivity(), "你还没选择快递公司", Toast.LENGTH_SHORT).show();
         } else if (getActivity() instanceof showResultListener) {
-
-          ((showResultListener) getActivity()).onshowResultListener(CompanyfromCodeUtils.Companyformat(mSelectCompany),mEdtText);
+          getEdtExpressTab();
+          mLogisticCode=mEdtText;
+          mShipperCode=mSelectCompany;//还是文字，需要转换成公司代码
+          ((showResultListener) getActivity()).onshowResultListener(
+              CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
         }
       }
     });

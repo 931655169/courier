@@ -3,9 +3,12 @@ package zjm.courier;
 import Entity.ExpressDetail;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +30,6 @@ import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 import search.ResultResultFragment;
 import search.SearchFragment;
-import send_express.DestinationActivity;
 import send_express.MapActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -40,18 +42,22 @@ public class MainActivity extends AppCompatActivity
   @BindView(R.id.pbt_tab) PageBottomTabLayout mPageButtonTalayoutButtom;
   @BindView(R.id.viewpager_tablayout_buttom) ViewPager mViewPagerTablayout;
   private FragmentListAdapter fragmentPagerAdapter;
+  public String LogisticCode;
+  public String ShipperCode;
+  private SendResultFragmentMessage sendResultFragmentMessage;
+  private ResultResultFragment resultResultFragment;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Fresco.initialize(this);//需要要senContentView前初始化
     setContentView(R.layout.activity_main);
+    LitePal.initialize(this);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
     initActionBar();
     initPageTabLayout();
     initViewPager();
-    LitePal.initialize(this);
   }
 
   void initActionBar() {
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity
   void initViewPager() {
     Fragment Homefragment = HomeFragment.newInstance();
     SearchFragment searchFragment = new SearchFragment();
-    ResultResultFragment resultResultFragment = new ResultResultFragment();
+    resultResultFragment = new ResultResultFragment();
     mFragmentArrayList = new ArrayList<Fragment>();
     mFragmentArrayList.add(Homefragment);
     mFragmentArrayList.add(searchFragment);
@@ -105,7 +111,6 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.main, menu);
     return true;
   }
@@ -123,27 +128,47 @@ public class MainActivity extends AppCompatActivity
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
   public boolean onNavigationItemSelected(MenuItem item) {
-    // Handle navigation view item clicks here.
     int id = item.getItemId();
-
     if (id == R.id.nav_histroy) {
       mViewPagerTablayout.setCurrentItem(2);
     } else if (id == R.id.nav_search) {
       Intent intent = new Intent(MainActivity.this, MapActivity.class);
       startActivity(intent);
-
     } else if (id == R.id.nav_home) {
       mViewPagerTablayout.setCurrentItem(0);
     } else if (id == R.id.nav_back) {
       Toast.makeText(this, "By 石成", Toast.LENGTH_SHORT).show();
     }
-
     drawer.closeDrawer(GravityCompat.START);
     return true;
   }
+  public Handler handler = new Handler() {
+    @Override
+    public void handleMessage(Message msg) {
+      super.handleMessage(msg);
+      if (msg != null) {
+        switch (msg.what) {
+          case 100:
+            //接收到ResultFragment响应处理
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  };
+  public  interface SendResultFragmentMessage{
+    public void getSearchMessage(String ShipperCode, String LogisticCode);
+  }
+  public void setSendResultFragmentMessage(SendResultFragmentMessage message){
+    this.sendResultFragmentMessage=message;
+  }
+  @Override
+  public void onshowResultListener(String ShipperCode, String LogisticCode) {
+    if (ShipperCode != null && LogisticCode != null) {
+      sendResultFragmentMessage.getSearchMessage(ShipperCode,LogisticCode);
 
-  @Override public void onshowResultListener(String ShipperCode,String OrderCode ) {
-    if (ShipperCode!=null && OrderCode!=null) {
+      fragmentPagerAdapter.notifyDataSetChanged();
       mViewPagerTablayout.setCurrentItem(3);
     }
   }

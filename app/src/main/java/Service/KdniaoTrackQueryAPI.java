@@ -3,11 +3,11 @@ package Service;
 import Entity.ExpressDetail;
 import Entity.TracesBean;
 import Network.ApiStores;
+import android.content.SharedPreferences;
 import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.List;
 import org.litepal.crud.DataSupport;
 import org.litepal.crud.callback.SaveCallback;
@@ -16,6 +16,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class KdniaoTrackQueryAPI {
+  private String mShipperCode;
+  private String mLogisticCode;
   public KdniaoTrackQueryAPI() {
   }
 
@@ -23,9 +25,9 @@ public class KdniaoTrackQueryAPI {
    * 向指定 URL 发送POST方法的请求
    */
   @SuppressWarnings("unused")
-  public void sendPost(String ShipperCode, String LogisticCode) throws Exception {
-    String mShipperCode = "YTO";
-    String mLogisticCode = "12345678";
+  public void sendPost(final String ShipperCode, String LogisticCode) throws Exception {
+    mShipperCode = ShipperCode;
+    mLogisticCode = LogisticCode;
 
     final String requestData = "{'OrderCode':'','ShipperCode':'"
         + mShipperCode
@@ -42,15 +44,17 @@ public class KdniaoTrackQueryAPI {
       public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
         response.body().saveAsync().listen(new SaveCallback() {
           @Override public void onFinish(boolean success) {
-            List<ExpressDetail> list = DataSupport.findAll(ExpressDetail.class);
-            Log.d("数据", list.get(0).getLogisticCode());
+
           }
         });
-        for (int i = 0; i < response.body().getTracesX().size(); i++) {
-          final TracesBean tracesBean = new TracesBean();
-          tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
-          tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
-          tracesBean.save();
+        if (response.body().isSuccess()){
+            DataSupport.deleteAll(TracesBean.class);
+          for (int i = 0; i < response.body().getTracesX().size(); i++) {
+            TracesBean tracesBean = new TracesBean();
+            tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
+            tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
+            tracesBean.save();
+          }
         }
       }
       @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
