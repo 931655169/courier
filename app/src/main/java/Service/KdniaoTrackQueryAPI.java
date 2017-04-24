@@ -1,19 +1,8 @@
 package Service;
 
-import Entity.ExpressDetail;
-import Entity.TracesBean;
-import Network.ApiStores;
-import android.content.SharedPreferences;
-import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.List;
-import org.litepal.crud.DataSupport;
-import org.litepal.crud.callback.SaveCallback;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class KdniaoTrackQueryAPI {
   private String mShipperCode;
@@ -25,46 +14,9 @@ public class KdniaoTrackQueryAPI {
    * 向指定 URL 发送POST方法的请求
    */
   @SuppressWarnings("unused")
-  public void sendPost(final String ShipperCode, String LogisticCode) throws Exception {
-    mShipperCode = ShipperCode;
-    mLogisticCode = LogisticCode;
 
-    final String requestData = "{'OrderCode':'','ShipperCode':'"
-        + mShipperCode
-        + "','LogisticCode':'"
-        + mLogisticCode
-        + "'}";
-    String dataSign = encrypt(requestData, AppKey, "UTF-8");
-    ApiStores apiStores = ApiService.createApiStores();
-    Call<ExpressDetail> call = apiStores.getExpressDetail(
-        urlEncoder(dataSign, "UTF-8"), "2", EBusinessID, urlEncoder(requestData, "UTF-8"), "1002"
-    );
-    call.enqueue(new Callback<ExpressDetail>() {
-      @Override
-      public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
-        response.body().saveAsync().listen(new SaveCallback() {
-          @Override public void onFinish(boolean success) {
-
-          }
-        });
-        if (response.body().isSuccess()){
-            DataSupport.deleteAll(TracesBean.class);
-          for (int i = 0; i < response.body().getTracesX().size(); i++) {
-            TracesBean tracesBean = new TracesBean();
-            tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
-            tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
-            tracesBean.save();
-          }
-        }
-      }
-      @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
-        Log.d("调用", t.getMessage() + "网络请求失败");
-      }
-    });
-  }
-
-  private String EBusinessID = "1284116";
-  private String AppKey = "e0fd3b17-ea19-4e71-a068-f9997a890a8e";
+  public static String EBusinessID = "1284116";
+  public static String AppKey = "e0fd3b17-ea19-4e71-a068-f9997a890a8e";
   private String ReqURL = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";
 
   /**
@@ -75,7 +27,7 @@ public class KdniaoTrackQueryAPI {
    * @throws Exception
    */
   @SuppressWarnings("unused")
-  private String MD5(String str, String charset) throws Exception {
+  private static String MD5(String str, String charset) throws Exception {
     MessageDigest md = MessageDigest.getInstance("MD5");
     md.update(str.getBytes(charset));
     byte[] result = md.digest();
@@ -97,13 +49,13 @@ public class KdniaoTrackQueryAPI {
    * @param charset 编码方式
    * @throws UnsupportedEncodingException
    */
-  private String base64(String str, String charset) throws UnsupportedEncodingException {
+  private static String base64(String str, String charset) throws UnsupportedEncodingException {
     String encoded = base64Encode(str.getBytes(charset));
     return encoded;
   }
 
   @SuppressWarnings("unused")
-  private String urlEncoder(String str, String charset) throws UnsupportedEncodingException {
+  public static String urlEncoder(String str, String charset) throws UnsupportedEncodingException {
     String result = URLEncoder.encode(str, charset);
     return result;
   }
@@ -118,7 +70,7 @@ public class KdniaoTrackQueryAPI {
    * @throws UnsupportedEncodingException ,Exception
    */
   @SuppressWarnings("unused")
-  private String encrypt(String content, String keyValue, String charset) throws
+  public static String encrypt(String content, String keyValue, String charset) throws
       UnsupportedEncodingException, Exception {
     if (keyValue != null) {
       return base64(MD5(content + keyValue, charset), charset);

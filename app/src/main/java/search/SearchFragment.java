@@ -19,6 +19,7 @@ import com.yyydjk.library.DropDownMenu;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import zjm.courier.MainActivity;
 import zjm.courier.R;
 
 public class SearchFragment extends Fragment {
@@ -72,7 +73,9 @@ public class SearchFragment extends Fragment {
           getEdtExpressTab();
           mLogisticCode=mEdtText;
           mShipperCode=mSelectCompany;//还是文字，需要转换成公司代码
-          ((showResultListener) getActivity()).onshowResultListener(
+          //((showResultListener) getActivity()).onshowResultListener(
+          //    CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
+          ((MainActivity) getActivity()).onshowResultListener(
               CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
         }
       }
