@@ -4,50 +4,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools">
-  <RelativeLayout
+
+  <EditText
+      android:id="@+id/edt_express_tab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:drawableLeft="@mipmap/number"
+      android:hint="输入快递单号"
+      android:layout_gravity="center"
+      android:layout_marginTop="100dp"
+      android:drawablePadding="20dp"
+      android:maxLength="14"
+      tools:text="11846198880700"
+  />
+  <com.yyydjk.library.DropDownMenu
+      android:id="@+id/dropDownMenu"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-    <com.yyydjk.library.DropDownMenu
-        android:id="@+id/dropDownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:ddmenuTextSize="13sp"
-        app:ddtextUnselectedColor="#444444"
-        app:ddtextSelectedColor="#2196f3"
-        app:dddividerColor="@color/white"
-        app:ddunderlineColor="@color/white"
-        app:ddmenuSelectedIcon="@mipmap/selecter"
-        app:ddmaskColor="@color/white"
-        app:ddmenuBackgroundColor="@color/white"
-        app:ddmenuUnselectedIcon="@mipmap/unselecter"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </LinearLayout>
-    <EditText
-        android:id="@+id/edt_express_tab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/express_tab"
-        android:hint="输入快递单号"
-        android:maxLength="14"
-        tools:text="11846198880700"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="49dp"
-        android:layout_above="@+id/dropDownMenu"
-        android:layout_alignParentStart="true"/>
+      android:layout_height="wrap_content"
+      android:layout_margin="20dp"
+      app:ddmenuTextSize="20sp"
+      app:ddtextUnselectedColor="#444444"
+      app:ddtextSelectedColor="#2196f3"
+      app:dddividerColor="@color/white"
+      app:ddunderlineColor="@color/white"
+      app:ddmenuSelectedIcon="@mipmap/selecter"
+      app:ddmaskColor="@color/white"
+      app:ddmenuBackgroundColor="@color/white"
+      android:gravity="center"
+      app:ddmenuUnselectedIcon="@mipmap/unselecter"/>
     <Button
         android:id="@+id/btn_ifsearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
         android:text="查询"
         android:textColor="@color/colorPrimary"
-        android:layout_marginEnd="35dp"
-        android:layout_alignBottom="@+id/edt_express_tab" android:layout_alignParentEnd="true"/>
-  </RelativeLayout>
-
+        />
 </LinearLayout>

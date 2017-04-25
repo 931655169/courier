@@ -103,7 +103,7 @@ public class SearchFragment extends Fragment {
       }
     });
     linearLayout = new LinearLayout(getContext());
-    linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+    linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
         ViewGroup.LayoutParams.WRAP_CONTENT));
     dropDownMenu.setDropDownMenu(Arrays.asList(mMenu), mPopupView, linearLayout);
   }
