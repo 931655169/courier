@@ -6,6 +6,8 @@ import Entity.TracesBean;
 import Network.ApiStores;
 import Service.ApiService;
 import Service.KdniaoTrackQueryAPI;
+import Utils.CompanyfromCodeUtils;
+import Utils.StatefromStateCode;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +33,7 @@ public class ResultResultFragment extends BaseFragment {
   @BindView(R.id.recycler_express_trace) RecyclerView mRecyclerViewExpressTrace;
   @BindView(R.id.txt_express_name) TextView mTxtExpressName;
   @BindView(R.id.txt_express_status) TextView mTxtExpressStatus;
+  @BindView(R.id.txt_express_company)TextView mTxtExpressCompany;
   private ExpressDetail expressDetail;
   private List<TracesBean> tracebeanlist = new ArrayList<TracesBean>();
   private RecyclerviewAdapter mExpressItemAdapter;
@@ -65,7 +68,8 @@ public class ResultResultFragment extends BaseFragment {
     if (DataSupport.findLast(ExpressDetail.class) != null) {
       expressDetail = DataSupport.findLast(ExpressDetail.class, true);
       mTxtExpressName.setText(expressDetail.getLogisticCode());
-      mTxtExpressStatus.setText(expressDetail.getState());
+      mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
+      mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
       if (expressDetail.isSuccess()){
         Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT);
         tracebeanlist=DataSupport.findAll(TracesBean.class);
@@ -118,10 +122,12 @@ public class ResultResultFragment extends BaseFragment {
         }
         initdb();
         initRecyclerview();
+        Log.d("xx","初始化成功");
       }
 
       @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
         Log.d("调用", t.getMessage() + "网络请求失败");
+        Toast.makeText(getContext(),"请检查网络",Toast.LENGTH_SHORT);
       }
     });
   }

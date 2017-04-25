@@ -41,6 +41,9 @@ public class PoiSearchTask implements OnPoiSearchListener {
 		mRecommandAdapter = recomandAdapter;
 
 	}
+	public PoiSearchTask(Context context){
+		mContext=context;
+	}
 
 	public void search(String keyWord,String city) {
 		Log.i("MY","search");

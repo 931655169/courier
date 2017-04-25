@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity
   public void onshowResultListener(String ShipperCode, String LogisticCode) {
     if (ShipperCode != null && LogisticCode != null) {
       sendResultFragmentMessage.getSearchMessage(ShipperCode,LogisticCode);
-
       fragmentPagerAdapter.notifyDataSetChanged();
       mViewPagerTablayout.setCurrentItem(3);
     }

@@ -1,6 +1,7 @@
 package send_express;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.services.cloud.CloudSearch;
 import send_express.lib.LocationTask;
 import send_express.lib.OnLocationGetListener;
 import send_express.lib.PositionEntity;
@@ -107,6 +109,7 @@ public class MapActivity extends Activity implements AMap.OnCameraChangeListener
     mRegeocodeTask
         .search(mStartPosition.latitude, mStartPosition.longitude);
     if (mIsFirst) {
+
       Utils.addEmulateData(mAmap, mStartPosition);
       if (mPositionMark != null) {
         mPositionMark.setToTop();

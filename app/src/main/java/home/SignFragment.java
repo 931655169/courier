@@ -39,7 +39,8 @@ public class SignFragment extends Fragment {
   }
   void initdb() {
     if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList=DataSupport.where("State = ?","3").find(ExpressDetail.class);
+      expressDetailList.clear();
+      expressDetailList.addAll(DataSupport.where("State == ?","3").find(ExpressDetail.class));
     }
   }
 

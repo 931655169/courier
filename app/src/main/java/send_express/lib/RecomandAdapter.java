@@ -31,16 +31,25 @@ import zjm.courier.R;
 public class RecomandAdapter extends BaseAdapter {
 
 	PositionEntity[] entities = new PositionEntity[] {
-			new PositionEntity(39.908722, 116.397496, "天安门","010"),
-			new PositionEntity(39.91141, 116.411306, "王府井","010"),
-			new PositionEntity(39.908342, 116.375121, "西单","010"),
-			new PositionEntity(39.990949, 116.481090, "方恒国际中心","010"),
-			new PositionEntity(39.914529, 116.316648, "玉渊潭公园","010"),
-			new PositionEntity(39.999093, 116.273945, "颐和园","010"),
-			new PositionEntity(39.999022, 116.324698, "清华大学","010"),
-			new PositionEntity(39.982940, 116.319802, "中关村","010"),
-			new PositionEntity(39.933708, 116.454185, "三里屯","010"),
-			new PositionEntity(39.941627, 116.435584, "东直门","010") };
+			new PositionEntity(37.543164, 115.590439
+					, "汇通快运","031"),
+			new PositionEntity(37.553785,115.599778
+					, "畅通货运","031"),
+			new PositionEntity(37.601999, 115.634103
+					, "韵达快递","031"),
+			new PositionEntity(37.701378, 115.685487
+					, "德邦","031"),
+			new PositionEntity(37.721066, 115.679026
+					, "申通快递","031"),
+			new PositionEntity(37.744271, 115.689943
+					, "中铁快运","031"),
+			new PositionEntity(37.710631, 115.713186
+					, "运达恒通火车站快零代办点","031"),
+			new PositionEntity(37.729615, 115.705776
+					, "安华物流","031"),
+			new PositionEntity(37.729774, 115.705971
+					, "希望物流(新桥南街)","031")
+	};
 
 	private List<PositionEntity> mPositionEntities;
 
@@ -91,7 +100,4 @@ public class RecomandAdapter extends BaseAdapter {
 		textView.setText(mPositionEntities.get(position).address);
 		return textView;
 	}
-
-	 
-
 }

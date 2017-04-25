@@ -1,6 +1,7 @@
 package home;
 
 import Entity.ExpressDetail;
+import Utils.CompanyfromCodeUtils;
 import Utils.StatefromStateCode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,12 +19,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     ImageView mImageViewExpress;
     TextView mTxtExpressStatus;
     TextView mTxtExpressName;
+    TextView mTxtExpressCompany;
 
     public ViewHolder(View itemView) {
       super(itemView);
       mImageViewExpress = (ImageView) itemView.findViewById(R.id.image_express);
       mTxtExpressName = (TextView) itemView.findViewById(R.id.txt_express_name);
       mTxtExpressStatus = (TextView) itemView.findViewById(R.id.txt_express_status);
+      mTxtExpressCompany= (TextView) itemView.findViewById(R.id.txt_express_company);
     }
   }
 
@@ -43,6 +46,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     holder.mImageViewExpress.setImageResource(R.mipmap.icon_blue);
     holder.mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
     holder.mTxtExpressName.setText(expressDetail.getLogisticCode());
+    holder.mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
   }
 
   @Override public int getItemCount() {

@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-  <TextView
-      android:id="@+id/txt_accepttime"
+  <LinearLayout
+      android:id="@+id/image_trace_line"
+      android:layout_width="30dp"
+      android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/circle"
+        android:id="@+id/circle2"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/traceline"
+        android:id="@+id/imageView"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/circle"
+        android:id="@+id/circle"/>
+  </LinearLayout>
+  <LinearLayout
+      android:id="@+id/accept"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      tools:text="2017-01-18 10:32:20"
-      android:layout_marginBottom="10dp"
-  />
-  <TextView
-      android:id="@+id/txt_acceptstation"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:text="【安徽省合肥市政务区柏堰工业园公司】 派件人 : 王耐富 派件中 派件员电话18755105463"
-  />
-  <ImageView
-      android:layout_width="wrap_content"
-      android:layout_height="50dp"
-  android:src="@mipmap/footline"/>
-</LinearLayout>
+      android:orientation="vertical"
+      android:layout_toEndOf="@id/image_trace_line"
+  >
+    <TextView
+        android:id="@+id/txt_accepttime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="2017-01-18 10:32:20"/>
+    <TextView
+        android:id="@+id/txt_acceptstation"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        tools:text="【安徽省合肥市政务区柏堰工业园公司】 派件人 : 王耐富 派件中 派件员电话18755105463"/>
+  </LinearLayout>
+
+</RelativeLayout>

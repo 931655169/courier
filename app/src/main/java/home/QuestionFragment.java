@@ -62,7 +62,7 @@ public class QuestionFragment extends BaseFragment {
 
   void initdb() {
     if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList=DataSupport.where("State = ?","4").find(ExpressDetail.class);
+      expressDetailList.addAll(DataSupport.where("State == ?","4").find(ExpressDetail.class));
     }
   }
 

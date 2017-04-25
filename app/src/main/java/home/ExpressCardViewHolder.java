@@ -1,6 +1,7 @@
 package home;
 
 import Entity.ExpressDetail;
+import Utils.CompanyfromCodeUtils;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ public class ExpressCardViewHolder extends EasyViewHolder<ExpressDetail> {
   @BindView(R.id.image_express) ImageView mImageViewExpress;
   @BindView(R.id.txt_express_status) TextView mTxtExpressStatus;
   @BindView(R.id.txt_express_name) TextView mTxtExpressName;
+  @BindView(R.id.txt_express_company)TextView mTxtExpressCompany;
   private Context mContext;
   public ExpressCardViewHolder(Context context, ViewGroup parent, int layoutId) {
     super(context, parent, R.layout.recycler_item_express_card);
@@ -26,5 +28,6 @@ public class ExpressCardViewHolder extends EasyViewHolder<ExpressDetail> {
     mImageViewExpress.setImageResource(R.mipmap.icon_blue);
     mTxtExpressStatus.setText(value.getState());
     mTxtExpressName.setText(value.getLogisticCode());
+    mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(value.getShipperCode()));
   }
 }

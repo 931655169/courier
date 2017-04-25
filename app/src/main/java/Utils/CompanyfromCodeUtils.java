@@ -11,7 +11,7 @@ public class CompanyfromCodeUtils {
     mCompanyName.put("中通","ZTO");
     mCompanyName.put("申通","STO");
     mCompanyName.put("圆通","YTO");
-    mCompanyName.put("韵达","TD");
+    mCompanyName.put("韵达","YD");
     mCompanyName.put("邮政平邮","YZPY");
     mCompanyName.put("EMS","EMS");
     mCompanyName.put("天天快递","HHTT");
