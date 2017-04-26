@@ -1,15 +1,20 @@
 package send_express;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amap.api.maps.AMap;
@@ -22,6 +27,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.cloud.CloudSearch;
+import java.util.ArrayList;
+import java.util.List;
 import send_express.lib.LocationTask;
 import send_express.lib.OnLocationGetListener;
 import send_express.lib.PositionEntity;
@@ -71,6 +78,41 @@ public class MapActivity extends Activity implements AMap.OnCameraChangeListener
     mRegeocodeTask = new RegeocodeTask(getApplicationContext());
     RouteTask.getInstance(getApplicationContext())
         .addRouteCalculateListener(this);
+    List<String> permissionList=new ArrayList<>();
+    if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+      permissionList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+    if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+      permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+    if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+      permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+    if (!permissionList.isEmpty()){
+      String[] permissions=permissionList.toArray(new String[permissionList.size()]);
+      ActivityCompat.requestPermissions(MapActivity.this,permissions,1);
+    }
+  }
+  @Override
+  public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults){
+    switch(requestCode){
+      case 1:
+        if (grantResults.length>0){
+          for (int result:grantResults){
+            if (result!= PackageManager.PERMISSION_GRANTED){
+              Toast.makeText(this,"必须同意所有权限才能使用本程序",Toast.LENGTH_SHORT).show();
+              finish();
+              return;
+            }
+          }
+        }
+        else {
+          Toast.makeText(this,"发生未知错误",Toast.LENGTH_SHORT).show();
+          finish();
+        }
+        break;
+      default:
+    }
   }
 
   private void init(Bundle savedInstanceState) {
