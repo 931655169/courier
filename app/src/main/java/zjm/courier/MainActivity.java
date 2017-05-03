@@ -23,6 +23,9 @@ import butterknife.ButterKnife;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import home.FragmentListAdapter;
 import home.HomeFragment;
+import home.QuestionFragment;
+import home.SignFragment;
+import home.UnSignFragment;
 import java.util.ArrayList;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageBottomTabLayout;
@@ -33,7 +36,8 @@ import search.SearchFragment;
 import send_express.MapActivity;
 
 public class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.showResultListener {
+    implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.showResultListener,
+    UnSignFragment.showResultListener, QuestionFragment.showResultListener, SignFragment.showResultListener{
   private ArrayList<Fragment> mFragmentArrayList;
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity
     drawer.closeDrawer(GravityCompat.START);
     return true;
   }
+
   public Handler handler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
@@ -157,16 +162,19 @@ public class MainActivity extends AppCompatActivity
       }
     }
   };
-  public  interface SendResultFragmentMessage{
+
+  public interface SendResultFragmentMessage {
     public void getSearchMessage(String ShipperCode, String LogisticCode);
   }
-  public void setSendResultFragmentMessage(SendResultFragmentMessage message){
-    this.sendResultFragmentMessage=message;
+
+  public void setSendResultFragmentMessage(SendResultFragmentMessage message) {
+    this.sendResultFragmentMessage = message;
   }
+
   @Override
   public void onshowResultListener(String ShipperCode, String LogisticCode) {
     if (ShipperCode != null && LogisticCode != null) {
-      sendResultFragmentMessage.getSearchMessage(ShipperCode,LogisticCode);
+      sendResultFragmentMessage.getSearchMessage(ShipperCode, LogisticCode);
       fragmentPagerAdapter.notifyDataSetChanged();
       mViewPagerTablayout.setCurrentItem(3);
     }

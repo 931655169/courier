@@ -8,12 +8,7 @@
     android:paddingTop="@dimen/vertical_padding"
     android:paddingLeft="@dimen/horizontal_padding"
     android:paddingBottom="@dimen/vertical_padding"
-
     android:text="目的地"
-
-
     >
-
-
 </TextView>
 

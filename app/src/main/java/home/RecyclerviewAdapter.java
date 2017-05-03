@@ -14,7 +14,6 @@ import zjm.courier.R;
 
 public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.ViewHolder> {
   private List<ExpressDetail> mExpressDetailList;
-
   static class ViewHolder extends RecyclerView.ViewHolder {
     ImageView mImageViewExpress;
     TextView mTxtExpressStatus;
@@ -26,8 +25,17 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
       mImageViewExpress = (ImageView) itemView.findViewById(R.id.image_express);
       mTxtExpressName = (TextView) itemView.findViewById(R.id.txt_express_name);
       mTxtExpressStatus = (TextView) itemView.findViewById(R.id.txt_express_status);
-      mTxtExpressCompany= (TextView) itemView.findViewById(R.id.txt_express_company);
+      mTxtExpressCompany = (TextView) itemView.findViewById(R.id.txt_express_company);
     }
+  }
+  private OnItemClickListener mOnItemClickListener = null;
+
+  //define interface
+  public static interface OnItemClickListener {
+    void onItemClick(View view , int position);
+  }
+  public void setOnItemClickListener(OnItemClickListener listener) {
+    this.mOnItemClickListener = listener;
   }
 
   public RecyclerviewAdapter(List<ExpressDetail> ExpressList) {
@@ -38,15 +46,25 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.recycler_item_express_card, parent, false);
     ViewHolder holder = new ViewHolder(view);
+    view.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (mOnItemClickListener!=null){
+          mOnItemClickListener.onItemClick(v,(int)v.getTag());
+        }
+      }
+    });
     return holder;
   }
+
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
     ExpressDetail expressDetail = mExpressDetailList.get(position);
     holder.mImageViewExpress.setImageResource(R.mipmap.icon_blue);
     holder.mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
     holder.mTxtExpressName.setText(expressDetail.getLogisticCode());
-    holder.mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
+    holder.mTxtExpressCompany.setText(
+        CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
+    holder.itemView.setTag(position);
   }
 
   @Override public int getItemCount() {

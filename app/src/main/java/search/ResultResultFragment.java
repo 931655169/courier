@@ -106,11 +106,7 @@ public class ResultResultFragment extends BaseFragment {
     call.enqueue(new Callback<ExpressDetail>() {
       @Override
       public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
-        response.body().saveAsync().listen(new SaveCallback() {
-          @Override public void onFinish(boolean success) {
-
-          }
-        });
+        response.body().saveOrUpdate("LogisticCode=?",response.body().getLogisticCode());
         if (response.body().isSuccess()) {
           DataSupport.deleteAll(TracesBean.class);
           for (int i = 0; i < response.body().getTracesX().size(); i++) {
@@ -119,6 +115,8 @@ public class ResultResultFragment extends BaseFragment {
             tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
             tracesBean.save();
           }
+        }else{
+          //TODO
         }
         initdb();
         initRecyclerview();

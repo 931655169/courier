@@ -2,10 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
 
   <EditText
       android:id="@+id/edt_express_tab"
@@ -19,6 +19,7 @@
       android:maxLength="14"
       tools:text="11846198880700"
   />
+
   <com.yyydjk.library.DropDownMenu
       android:id="@+id/dropDownMenu"
       android:layout_width="match_parent"
@@ -34,14 +35,21 @@
       app:ddmenuBackgroundColor="@color/white"
       android:gravity="center"
       app:ddmenuUnselectedIcon="@mipmap/unselecter"/>
-    <Button
-        android:id="@+id/btn_ifsearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_button_search"
-        android:layout_gravity="center"
-        android:layout_margin="30dp"
-        android:text="查询"
-        android:textColor="@color/colorPrimary"
-        />
+  <Button
+      android:id="@+id/btn_ifsearch"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/shape_button_search"
+      android:layout_gravity="center"
+      android:layout_margin="30dp"
+      android:text="查询"
+      android:textColor="@color/colorPrimary"
+  />
+  <com.mancj.materialsearchbar.MaterialSearchBar
+      app:mt_speechMode="true"
+      app:mt_hint="Custom hint"
+      app:mt_maxSuggestionsCount="18"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/searchBar"/>
 </LinearLayout>

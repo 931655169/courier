@@ -73,8 +73,6 @@ public class SearchFragment extends Fragment {
           getEdtExpressTab();
           mLogisticCode=mEdtText;
           mShipperCode=mSelectCompany;//还是文字，需要转换成公司代码
-          //((showResultListener) getActivity()).onshowResultListener(
-          //    CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
           ((MainActivity) getActivity()).onshowResultListener(
               CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
         }
