@@ -40,15 +40,7 @@ public class UnSignFragment extends Fragment {
     recyclerViewView.setAdapter(mUnsignExpressItemAdapter);
     recyclerViewView.addItemDecoration(
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
-    mUnsignExpressItemAdapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickListener() {
-      @Override public void onItemClick(View view, int position) {
-        if (getActivity() instanceof showResultListener){
-          ((MainActivity) getActivity()).onshowResultListener(
-              expressDetailList.get(position).getShipperCode(),
-              expressDetailList.get(position).getLogisticCode());
-        }
-      }
-    });
+
   }
   public interface showResultListener {
     public void onshowResultListener(String selectcompany, String edt);
@@ -69,6 +61,15 @@ public class UnSignFragment extends Fragment {
       expressDetailList.clear();
       expressDetailList.addAll(DataSupport.where("State == ?","2").find(ExpressDetail.class));
     }
+    mUnsignExpressItemAdapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickListener() {
+      @Override public void onItemClick(View view, int position) {
+        if (getActivity() instanceof showResultListener){
+          ((MainActivity) getActivity()).onshowResultListener(
+              expressDetailList.get(position).getShipperCode(),
+              expressDetailList.get(position).getLogisticCode());
+        }
+      }
+    });
   }
 
   public class SpaceItemDecoration extends RecyclerView.ItemDecoration {

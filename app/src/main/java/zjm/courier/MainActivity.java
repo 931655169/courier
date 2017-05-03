@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity
   public String LogisticCode;
   public String ShipperCode;
   private SendResultFragmentMessage sendResultFragmentMessage;
-  private ResultResultFragment resultResultFragment;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity
   void initViewPager() {
     Fragment Homefragment = HomeFragment.newInstance();
     SearchFragment searchFragment = new SearchFragment();
-    resultResultFragment = new ResultResultFragment();
+    Fragment resultResultFragment=ResultResultFragment.newInstance();
     mFragmentArrayList = new ArrayList<Fragment>();
     mFragmentArrayList.add(Homefragment);
     mFragmentArrayList.add(searchFragment);
@@ -102,6 +100,7 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager = this.getSupportFragmentManager();
     fragmentPagerAdapter = new FragmentListAdapter(fragmentManager, mFragmentArrayList);
     mViewPagerTablayout.setAdapter(fragmentPagerAdapter);
+    mViewPagerTablayout.setCurrentItem(1);
   }
 
   @Override

@@ -62,6 +62,13 @@ public class QuestionFragment extends BaseFragment {
     recyclerViewView.setAdapter(mQuestionExpressItemAdapter);
     recyclerViewView.addItemDecoration(
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
+
+  }
+
+  void initdb() {
+    if (DataSupport.findAll(ExpressDetail.class) != null) {
+      expressDetailList.addAll(DataSupport.where("State == ?","4").find(ExpressDetail.class));
+    }
     mQuestionExpressItemAdapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickListener() {
       @Override public void onItemClick(View view, int position) {
         if (getActivity() instanceof showResultListener) {
@@ -71,12 +78,6 @@ public class QuestionFragment extends BaseFragment {
         }
       }
     });
-  }
-
-  void initdb() {
-    if (DataSupport.findAll(ExpressDetail.class) != null) {
-      expressDetailList.addAll(DataSupport.where("State == ?","4").find(ExpressDetail.class));
-    }
   }
   public interface showResultListener {
     public void onshowResultListener(String selectcompany, String edt);

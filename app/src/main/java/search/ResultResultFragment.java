@@ -11,6 +11,7 @@ import Utils.StatefromStateCode;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,19 @@ public class ResultResultFragment extends BaseFragment {
   private RecyclerviewAdapter mExpressItemAdapter;
   private TraceAdapter mTraceAdapter;
   private Handler hander;
+  private static ResultResultFragment fragment = null;
+  public ResultResultFragment(){
+  }
+  public static Fragment newInstance() {
+    if (fragment == null) {
+      synchronized (ResultResultFragment.class) {
+        if (fragment == null) {
+          fragment = new ResultResultFragment();
+        }
+      }
+    }
+    return fragment;
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -71,13 +85,11 @@ public class ResultResultFragment extends BaseFragment {
       mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
       mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
       if (expressDetail.isSuccess()){
-        Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT);
         tracebeanlist=DataSupport.findAll(TracesBean.class);
         mTraceAdapter=new TraceAdapter(tracebeanlist);
       }
       if (!expressDetail.isSuccess()){
         tracebeanlist.clear();
-        Log.d("xx","无状态");
       }
     }
   }
@@ -91,8 +103,8 @@ public class ResultResultFragment extends BaseFragment {
     }
   }
 
-  public void sendPost(final String ShipperCode, String LogisticCode) throws Exception {
-    final String requestData = "{'OrderCode':'','ShipperCode':'"
+  public void sendPost(String ShipperCode, final String LogisticCode) throws Exception {
+    String requestData = "{'OrderCode':'','ShipperCode':'"
         + ShipperCode
         + "','LogisticCode':'"
         + LogisticCode
@@ -106,7 +118,12 @@ public class ResultResultFragment extends BaseFragment {
     call.enqueue(new Callback<ExpressDetail>() {
       @Override
       public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
-        response.body().saveOrUpdate("LogisticCode=?",response.body().getLogisticCode());
+        response.body().saveAsync().listen(
+            new SaveCallback() {
+              @Override public void onFinish(boolean success) {
+                Log.d("reponse","保存数据成功");
+              }
+            });
         if (response.body().isSuccess()) {
           DataSupport.deleteAll(TracesBean.class);
           for (int i = 0; i < response.body().getTracesX().size(); i++) {
@@ -115,10 +132,9 @@ public class ResultResultFragment extends BaseFragment {
             tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
             tracesBean.save();
           }
-        }else{
-          //TODO
         }
         initdb();
+        Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT).show();
         initRecyclerview();
         Log.d("xx","初始化成功");
       }
