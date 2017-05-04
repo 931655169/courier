@@ -9,14 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mancj.materialsearchbar.MaterialSearchBar;
-import com.yyydjk.library.DropDownMenu;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,24 +21,16 @@ import zjm.courier.MainActivity;
 import zjm.courier.R;
 
 public class SearchFragment extends Fragment {
-  //@BindView(R.id.dropDownMenu) DropDownMenu dropDownMenu;
   @BindView(R.id.btn_ifsearch) Button mBtnSearch;
   @BindView(R.id.searchBar) MaterialSearchBar materialSearchBar;
   @BindView(R.id.nice_spinner) NiceSpinner niceSpinner;
-
-  private List<View> mPopupView;
   private String mEdtText;
-  private String[] mMenu = {"请选择快递公司"};
-  private LinearLayout linearLayout;
-  private dropdownmenuAdapter CompanyAdapter;
-  private String mCompanyName[] = {"顺丰", "百世汇通", "中通", "申通", "圆通", "韵达", "邮政平递", "EMS", "天天快递"};
   private String mShipperCode;
   private String mLogisticCode;
   private String mSelectCompany;
   showResultListener mCallback;
   private List<String> dataset =
-      new LinkedList<>(Arrays.asList("请选择相应的快递公司","顺丰", "百世汇通", "中通", "申通", "圆通", "韵达", "邮政平递", "EMS", "天天快递"));
-  private MaterialSearchBar.OnSearchActionListener onSearchActionListener;
+      new LinkedList<>(Arrays.asList("请选择相应的快递公司","顺丰", "百世汇通", "中通", "申通", "圆通", "韵达", "邮政平邮", "EMS", "天天快递"));
 
   public interface showResultListener {
     public void onshowResultListener(String selectcompany, String edt);
@@ -67,7 +55,6 @@ public class SearchFragment extends Fragment {
     View v = inflater.inflate(R.layout.search_courier, container, false);
     ButterKnife.bind(this, v);
     nineSpinner();
-    //initDropdownWindow();
 
     mBtnSearch.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -91,26 +78,6 @@ public class SearchFragment extends Fragment {
     mEdtText = materialSearchBar.getText().toString();
   }
 
-  //private void initDropdownWindow() {
-  //  final ListView ComanyMenu = new ListView(getActivity());
-  //  ComanyMenu.setDividerHeight(0);
-  //  CompanyAdapter = new dropdownmenuAdapter(getActivity(), Arrays.asList(mCompanyName));
-  //  ComanyMenu.setAdapter(CompanyAdapter);
-  //  mPopupView = new ArrayList<>();
-  //  mPopupView.add(ComanyMenu);
-  //  ComanyMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-  //    @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-  //      CompanyAdapter.setCheckItem(position);
-  //      dropDownMenu.setTabText(position == 0 ? mMenu[0] : mCompanyName[position]);
-  //      dropDownMenu.closeMenu();
-  //      mSelectCompany = mCompanyName[position];
-  //    }
-  //  });
-  //  linearLayout = new LinearLayout(getContext());
-  //  linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-  //      ViewGroup.LayoutParams.WRAP_CONTENT));
-  //  dropDownMenu.setDropDownMenu(Arrays.asList(mMenu), mPopupView, linearLayout);
-  //}
   private void nineSpinner(){
     niceSpinner.attachDataSource(dataset);
     niceSpinner.addOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
-import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 import home.RecyclerviewAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,16 +125,21 @@ public class ResultResultFragment extends BaseFragment {
               }
             });
         if (response.body().isSuccess()) {
-          DataSupport.deleteAll(TracesBean.class);
-          for (int i = 0; i < response.body().getTracesX().size(); i++) {
-            TracesBean tracesBean = new TracesBean();
-            tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
-            tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
-            tracesBean.save();
+          if (response.body().getReason()==null){
+            DataSupport.deleteAll(TracesBean.class);
+            for (int i = 0; i < response.body().getTracesX().size(); i++) {
+              TracesBean tracesBean = new TracesBean();
+              tracesBean.setAcceptStation(response.body().getTracesX().get(i).getAcceptStation());
+              tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
+              tracesBean.save();
+            }
+            initdb();
+            initRecyclerview();
+            Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT).show();
           }
-          initdb();
-          initRecyclerview();
-          Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT).show();
+          if (response.body().getReason()!=null){
+            Toast.makeText(getActivity(),response.body().getReason(),Toast.LENGTH_SHORT).show();
+          }
         }
         if (!response.body().isSuccess()){
           Toast.makeText(getActivity(),response.body().getReason(),Toast.LENGTH_SHORT).show();
