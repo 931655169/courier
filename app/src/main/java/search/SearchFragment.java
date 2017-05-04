@@ -4,17 +4,11 @@ import Utils.CompanyfromCodeUtils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.PopupMenu;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,14 +18,17 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.yyydjk.library.DropDownMenu;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import search.nicespinner.NiceSpinner;
 import zjm.courier.MainActivity;
 import zjm.courier.R;
 
 public class SearchFragment extends Fragment {
-  @BindView(R.id.dropDownMenu) DropDownMenu dropDownMenu;
+  //@BindView(R.id.dropDownMenu) DropDownMenu dropDownMenu;
   @BindView(R.id.btn_ifsearch) Button mBtnSearch;
-  @BindView(R.id.searchBar)MaterialSearchBar materialSearchBar;
+  @BindView(R.id.searchBar) MaterialSearchBar materialSearchBar;
+  @BindView(R.id.nice_spinner) NiceSpinner niceSpinner;
 
   private List<View> mPopupView;
   private String mEdtText;
@@ -43,6 +40,8 @@ public class SearchFragment extends Fragment {
   private String mLogisticCode;
   private String mSelectCompany;
   showResultListener mCallback;
+  private List<String> dataset =
+      new LinkedList<>(Arrays.asList("请选择相应的快递公司","顺丰", "百世汇通", "中通", "申通", "圆通", "韵达", "邮政平递", "EMS", "天天快递"));
   private MaterialSearchBar.OnSearchActionListener onSearchActionListener;
 
   public interface showResultListener {
@@ -62,15 +61,13 @@ public class SearchFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
   }
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
     View v = inflater.inflate(R.layout.search_courier, container, false);
     ButterKnife.bind(this, v);
-    initDropdownWindow();
-
+    nineSpinner();
+    //initDropdownWindow();
 
     mBtnSearch.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -80,8 +77,8 @@ public class SearchFragment extends Fragment {
           Toast.makeText(getActivity(), "你还没选择快递公司", Toast.LENGTH_SHORT).show();
         } else if (getActivity() instanceof showResultListener) {
           getEdtExpressTab();
-          mLogisticCode=mEdtText;
-          mShipperCode=mSelectCompany;//还是文字，需要转换成公司代码
+          mLogisticCode = mEdtText;
+          mShipperCode = mSelectCompany;//还是文字，需要转换成公司代码
           ((MainActivity) getActivity()).onshowResultListener(
               CompanyfromCodeUtils.Companyformat(mShipperCode), mLogisticCode);
         }
@@ -93,24 +90,37 @@ public class SearchFragment extends Fragment {
   private void getEdtExpressTab() {
     mEdtText = materialSearchBar.getText().toString();
   }
-  private void initDropdownWindow() {
-    final ListView ComanyMenu = new ListView(getActivity());
-    ComanyMenu.setDividerHeight(0);
-    CompanyAdapter = new dropdownmenuAdapter(getActivity(), Arrays.asList(mCompanyName));
-    ComanyMenu.setAdapter(CompanyAdapter);
-    mPopupView = new ArrayList<>();
-    mPopupView.add(ComanyMenu);
-    ComanyMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+  //private void initDropdownWindow() {
+  //  final ListView ComanyMenu = new ListView(getActivity());
+  //  ComanyMenu.setDividerHeight(0);
+  //  CompanyAdapter = new dropdownmenuAdapter(getActivity(), Arrays.asList(mCompanyName));
+  //  ComanyMenu.setAdapter(CompanyAdapter);
+  //  mPopupView = new ArrayList<>();
+  //  mPopupView.add(ComanyMenu);
+  //  ComanyMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+  //    @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+  //      CompanyAdapter.setCheckItem(position);
+  //      dropDownMenu.setTabText(position == 0 ? mMenu[0] : mCompanyName[position]);
+  //      dropDownMenu.closeMenu();
+  //      mSelectCompany = mCompanyName[position];
+  //    }
+  //  });
+  //  linearLayout = new LinearLayout(getContext());
+  //  linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+  //      ViewGroup.LayoutParams.WRAP_CONTENT));
+  //  dropDownMenu.setDropDownMenu(Arrays.asList(mMenu), mPopupView, linearLayout);
+  //}
+  private void nineSpinner(){
+    niceSpinner.attachDataSource(dataset);
+    niceSpinner.addOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        CompanyAdapter.setCheckItem(position);
-        dropDownMenu.setTabText(position == 0 ? mMenu[0] : mCompanyName[position]);
-        dropDownMenu.closeMenu();
-        mSelectCompany = mCompanyName[position];
+        if (position==0){
+          mSelectCompany=null;
+        }else {
+          mSelectCompany=dataset.get(position);
+        }
       }
     });
-    linearLayout = new LinearLayout(getContext());
-    linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT));
-    dropDownMenu.setDropDownMenu(Arrays.asList(mMenu), mPopupView, linearLayout);
   }
 }

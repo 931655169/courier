@@ -13,22 +13,13 @@
       app:mt_maxSuggestionsCount="18"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="20dp"
       android:id="@+id/searchBar"/>
-  <com.yyydjk.library.DropDownMenu
-      android:id="@+id/dropDownMenu"
+  <search.nicespinner.NiceSpinner
+      android:id="@+id/nice_spinner"
+      app:textTint="@color/black"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="20dp"
-      app:ddmenuTextSize="20sp"
-      app:ddtextUnselectedColor="#444444"
-      app:ddtextSelectedColor="#2196f3"
-      app:dddividerColor="@color/white"
-      app:ddunderlineColor="@color/white"
-      app:ddmenuSelectedIcon="@mipmap/selecter"
-      app:ddmaskColor="@color/white"
-      app:ddmenuBackgroundColor="@color/white"
-      android:gravity="center"
-      app:ddmenuUnselectedIcon="@mipmap/unselecter"/>
+      android:layout_height="wrap_content"/>
   <Button
       android:id="@+id/btn_ifsearch"
       android:layout_width="wrap_content"
