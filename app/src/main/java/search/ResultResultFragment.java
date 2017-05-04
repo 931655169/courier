@@ -118,7 +118,7 @@ public class ResultResultFragment extends BaseFragment {
     call.enqueue(new Callback<ExpressDetail>() {
       @Override
       public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
-        response.body().saveAsync().listen(
+        response.body().saveOrUpdateAsync().listen(
             new SaveCallback() {
               @Override public void onFinish(boolean success) {
                 Log.d("reponse","保存数据成功");
@@ -132,13 +132,14 @@ public class ResultResultFragment extends BaseFragment {
             tracesBean.setAcceptTime(response.body().getTracesX().get(i).getAcceptTime());
             tracesBean.save();
           }
+          initdb();
+          initRecyclerview();
+          Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT).show();
         }
-        initdb();
-        Toast.makeText(getActivity(),"获取成功",Toast.LENGTH_SHORT).show();
-        initRecyclerview();
-        Log.d("xx","初始化成功");
+        if (!response.body().isSuccess()){
+          Toast.makeText(getActivity(),response.body().getReason(),Toast.LENGTH_SHORT).show();
+        }
       }
-
       @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
         Log.d("调用", t.getMessage() + "网络请求失败");
         Toast.makeText(getContext(),"请检查网络",Toast.LENGTH_SHORT);

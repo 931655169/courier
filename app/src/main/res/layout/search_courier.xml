@@ -6,20 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-  <EditText
-      android:id="@+id/edt_express_tab"
-      android:layout_width="wrap_content"
+  <com.mancj.materialsearchbar.MaterialSearchBar
+      android:layout_marginTop="30dp"
+      app:mt_hint="请输入快递单号"
+      app:mt_placeholder="点击输入快递单号"
+      app:mt_maxSuggestionsCount="18"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:drawableLeft="@mipmap/number"
-      android:hint="输入快递单号"
-      android:layout_gravity="center"
-      android:layout_marginTop="100dp"
-      android:drawablePadding="20dp"
-      android:maxLength="14"
-      tools:text="11846198880700"
-  />
-
+      android:id="@+id/searchBar"/>
   <com.yyydjk.library.DropDownMenu
       android:id="@+id/dropDownMenu"
       android:layout_width="match_parent"
@@ -45,11 +39,5 @@
       android:text="查询"
       android:textColor="@color/colorPrimary"
   />
-  <com.mancj.materialsearchbar.MaterialSearchBar
-      app:mt_speechMode="true"
-      app:mt_hint="Custom hint"
-      app:mt_maxSuggestionsCount="18"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/searchBar"/>
+
 </LinearLayout>
