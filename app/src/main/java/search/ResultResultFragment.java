@@ -8,6 +8,7 @@ import Service.ApiService;
 import Service.KdniaoTrackQueryAPI;
 import Utils.CompanyfromCodeUtils;
 import Utils.StatefromStateCode;
+import android.content.ContentValues;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,7 @@ public class ResultResultFragment extends BaseFragment {
   private List<TracesBean> tracebeanlist = new ArrayList<TracesBean>();
   private RecyclerviewAdapter mExpressItemAdapter;
   private TraceAdapter mTraceAdapter;
+  private String mLogisticCode;
   private Handler hander;
   private static ResultResultFragment fragment = null;
   public ResultResultFragment(){
@@ -57,6 +59,7 @@ public class ResultResultFragment extends BaseFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
   }
 
   @Override protected int getLayoutResId() {
@@ -77,10 +80,10 @@ public class ResultResultFragment extends BaseFragment {
     mRecyclerViewExpressTrace.addItemDecoration(
         new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_room)));
   }
-
   public void initdb() {
-    if (DataSupport.findLast(ExpressDetail.class) != null) {
-      expressDetail = DataSupport.findLast(ExpressDetail.class, true);
+    if (mLogisticCode!=null&&DataSupport.where("LogisticCode = ?",mLogisticCode).find(ExpressDetail.class)!=null) {
+      List<ExpressDetail> expressDetails= DataSupport.where("LogisticCode = ?",mLogisticCode).limit(1).find(ExpressDetail.class);
+      expressDetail=expressDetails.get(0);
       mTxtExpressName.setText(expressDetail.getLogisticCode());
       mTxtExpressStatus.setText(StatefromStateCode.format(expressDetail.getState()));
       mTxtExpressCompany.setText(CompanyfromCodeUtils.Codeformat(expressDetail.getShipperCode()));
@@ -118,12 +121,7 @@ public class ResultResultFragment extends BaseFragment {
     call.enqueue(new Callback<ExpressDetail>() {
       @Override
       public void onResponse(Call<ExpressDetail> call, final Response<ExpressDetail> response) {
-        response.body().saveOrUpdateAsync().listen(
-            new SaveCallback() {
-              @Override public void onFinish(boolean success) {
-                Log.d("reponse","保存数据成功");
-              }
-            });
+        response.body().saveOrUpdate("LogisticCode=?",response.body().getLogisticCode());
         if (response.body().isSuccess()) {
           if (response.body().getReason()==null){
             DataSupport.deleteAll(TracesBean.class);
@@ -147,7 +145,7 @@ public class ResultResultFragment extends BaseFragment {
       }
       @Override public void onFailure(Call<ExpressDetail> call, Throwable t) {
         Log.d("调用", t.getMessage() + "网络请求失败");
-        Toast.makeText(getContext(),"请检查网络",Toast.LENGTH_SHORT);
+        Toast.makeText(getContext(),"请检查网络",Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -156,8 +154,9 @@ public class ResultResultFragment extends BaseFragment {
     MainActivity activity = (MainActivity) getActivity();
     hander = activity.handler;
     activity.setSendResultFragmentMessage(new MainActivity.SendResultFragmentMessage() {
-      @Override public void getSearchMessage(String mShipperCode, String mLogisticCode) {
-        post(mShipperCode, mLogisticCode);
+      @Override public void getSearchMessage(String ShipperCode, String LogisticCode) {
+        post(ShipperCode, LogisticCode);
+        mLogisticCode=LogisticCode;
       }
     });
   }

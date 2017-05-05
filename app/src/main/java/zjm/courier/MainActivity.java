@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
   void initViewPager() {
     Fragment Homefragment = HomeFragment.newInstance();
     SearchFragment searchFragment = new SearchFragment();
-    Fragment resultResultFragment=ResultResultFragment.newInstance();
+    ResultResultFragment resultResultFragment=new ResultResultFragment();
     mFragmentArrayList = new ArrayList<Fragment>();
     mFragmentArrayList.add(Homefragment);
     mFragmentArrayList.add(searchFragment);
