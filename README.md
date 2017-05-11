@@ -1,4 +1,4 @@
-# courier
+# Courier
 - Courier是一款独立开发的查询快递类型的APP
 # 效果图
 ![快递轨迹](https://ws1.sinaimg.cn/mw690/ad376fabgy1ffh67gnx0mj20f10pvtdx.jpg)
