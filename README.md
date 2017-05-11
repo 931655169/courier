@@ -1,5 +1,8 @@
 # courier
 - Courier是一款独立开发的查询快递类型的APP
+# 效果图
+![快递轨迹](https://ws1.sinaimg.cn/mw690/ad376fabgy1ffh67gnx0mj20f10pvtdx.jpg)
+![快递状态](https://ws1.sinaimg.cn/mw690/ad376fabgy1ffh65jij5tj20f10psdhf.jpg)
 ## 本项目使用的第三方：
 - Butter Knife：通过注解绑定View
 - Frecro:加载圆角图片
@@ -10,6 +13,3 @@
 ## 实现功能
 - 查询快递状态
 - 查询快递轨迹
-# 效果图
-![](https://ws1.sinaimg.cn/large/ad376fabgy1ffh612uvvqj20f10pvtdx.jpg)
-![](https://ws1.sinaimg.cn/large/ad376fabgy1ffh6278e4hj20f10psdhf.jpg)
