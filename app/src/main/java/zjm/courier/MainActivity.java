@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     } else if (id == R.id.nav_home) {
       mViewPagerTablayout.setCurrentItem(0);
     } else if (id == R.id.nav_back) {
-      Toast.makeText(this, "By 石成", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "By 曾建民 931655169@qq.com", Toast.LENGTH_SHORT).show();
     }
     drawer.closeDrawer(GravityCompat.START);
     return true;

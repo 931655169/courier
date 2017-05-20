@@ -15,20 +15,28 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="20dp"
       android:id="@+id/searchBar"/>
-  <search.nicespinner.NiceSpinner
-      android:id="@+id/nice_spinner"
-      app:textTint="@color/black"
+  <LinearLayout
+      android:orientation="horizontal"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
-  <Button
-      android:id="@+id/btn_ifsearch"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@drawable/shape_button_search"
-      android:layout_gravity="center"
-      android:layout_margin="30dp"
-      android:text="查询"
-      android:textColor="@color/colorPrimary"
-  />
+      android:layout_height="wrap_content">
+    <search.nicespinner.NiceSpinner
+        android:id="@+id/nice_spinner"
+        app:textTint="@color/black"
+        android:textAlignment="center"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_ifsearch"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_button_search"
+        android:text="查询"
+        android:textColor="@color/colorPrimary"
+    />
+  </LinearLayout>
+
 
 </LinearLayout>

@@ -8,23 +8,24 @@ import Service.ApiService;
 import Service.KdniaoTrackQueryAPI;
 import Utils.CompanyfromCodeUtils;
 import Utils.StatefromStateCode;
-import android.content.ContentValues;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import home.RecyclerviewAdapter;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import org.litepal.crud.DataSupport;
-import org.litepal.crud.callback.SaveCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +37,7 @@ public class ResultResultFragment extends BaseFragment {
   @BindView(R.id.txt_express_name) TextView mTxtExpressName;
   @BindView(R.id.txt_express_status) TextView mTxtExpressStatus;
   @BindView(R.id.txt_express_company)TextView mTxtExpressCompany;
+  @BindView(R.id.image_express)ImageView mImageExpress;
   private ExpressDetail expressDetail;
   private List<TracesBean> tracebeanlist = new ArrayList<TracesBean>();
   private RecyclerviewAdapter mExpressItemAdapter;
@@ -59,7 +61,6 @@ public class ResultResultFragment extends BaseFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
   }
 
   @Override protected int getLayoutResId() {
@@ -90,6 +91,7 @@ public class ResultResultFragment extends BaseFragment {
       if (expressDetail.isSuccess()){
         tracebeanlist=DataSupport.findAll(TracesBean.class);
         mTraceAdapter=new TraceAdapter(tracebeanlist);
+        mImageExpress.setImageResource(R.mipmap.icon_blue);
       }
       if (!expressDetail.isSuccess()){
         tracebeanlist.clear();
